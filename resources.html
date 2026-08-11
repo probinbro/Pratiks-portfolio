@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Junior Fellow Resource Hub - Pratik Mojumder</title>
+  <meta name="description" content="Open resources for junior environmental researchers: shapefiles, tutorials, and scripts to get started with geospatial work.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>(function(){try{var t=localStorage.getItem("theme");if(!t){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}if(t==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+  <link rel="stylesheet" href="assets/css/main.css?v=20260811">
+  <link rel="stylesheet" href="assets/css/chrome.css?v=20260811">
+</head>
+<body>
+<script src="assets/js/chrome.js?v=20260811" data-page="resources"></script>
+
+<!-- Warm hero -->
+<section class="hub-hero">
+  <div class="container">
+    <span class="eyebrow earth"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19V5a2 2 0 012-2h11a2 2 0 012 2v14"/><path d="M4 19a2 2 0 002 2h13"/><path d="M9 7h6M9 11h6M9 15h4"/></svg><span>For Junior Fellows</span></span>
+    <h1 style="margin-top: 16px;">A place to start. And a place to come back to.</h1>
+    <p class="mt-16">Open datasets, methodology walkthroughs, and coding scripts I've used and refined. If you're an early-career researcher trying to get your first susceptibility map, your first RSEI composite, or your first clean shapefile of a study area - start here.</p>
+    <div class="btn-row mt-24">
+      <a class="btn btn-earth" href="#resources">Browse resources</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/in/pratikmojumder/" target="_blank" rel="noopener">Ask a question on LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<!-- Search + filter -->
+<section style="padding: 40px 0 60px;" id="resources">
+  <div class="container">
+    <div class="hub-filter">
+      <input type="search" placeholder="Search resources (e.g. 'RSEI', 'susceptibility', 'shapefile')" aria-label="Search resources">
+      <button class="active" data-cat="all">All</button>
+      <button data-cat="shapefile">Shapefiles</button>
+      <button data-cat="tutorial">Tutorials</button>
+      <button data-cat="script">Scripts</button>
+      <button data-cat="dataset">Datasets</button>
+    </div>
+
+    <p class="note" style="margin: -6px 0 22px;">The public hub is being populated. In the meantime, each resource below is shared directly &mdash; hit <strong>Request</strong> and I'll send the files over.</p>
+
+    <div class="resource-list">
+
+      <div class="resource" data-cat="shapefile">
+        <div class="resource-icon">SHP</div>
+        <div>
+          <h4>Bangladesh district boundaries - clean, projected</h4>
+          <p>Cleaned district-level shapefile with attributes standardized for joins. Projected to BUTM (Bangladesh Transverse Mercator).</p>
+          <div class="resource-meta"><span>SHAPEFILE · ZIP</span><span>~3.5 MB</span><span>CC-BY-4.0</span></div>
+        </div>
+        <div class="resource-actions">
+          <a class="btn btn-ghost" href="mailto:pratikmojumdar@gmail.com?subject=Resource%20request">Request</a>
+        </div>
+      </div>
+
+      <div class="resource" data-cat="tutorial">
+        <div class="resource-icon">MD</div>
+        <div>
+          <h4>Google Earth Engine: land-use classification, step by step</h4>
+          <p>Beginner walkthrough for training a Random Forest classifier on Landsat imagery in GEE. Assumes zero prior JavaScript knowledge.</p>
+          <div class="resource-meta"><span>MARKDOWN + PDF</span><span>18 pages</span><span>GEE JS</span></div>
+        </div>
+        <div class="resource-actions">
+          <a class="btn btn-ghost" href="mailto:pratikmojumdar@gmail.com?subject=Resource%20request">Request</a>
+        </div>
+      </div>
+
+      <div class="resource" data-cat="script">
+        <div class="resource-icon">R</div>
+        <div>
+          <h4>Fuzzy c-means clustering for rainfall zones (R)</h4>
+          <p>Reproducible R script implementing the fuzzy c-means workflow from the Bangladesh rainfall paper. Includes sample data and a rendered vignette.</p>
+          <div class="resource-meta"><span>R · SCRIPT</span><span>~120 KB</span><span>MIT</span></div>
+        </div>
+        <div class="resource-actions">
+          <a class="btn btn-ghost" href="mailto:pratikmojumdar@gmail.com?subject=Resource%20request">Request</a>
+        </div>
+      </div>
+
+      <div class="resource" data-cat="script">
+        <div class="resource-icon">PY</div>
+        <div>
+          <h4>Landslide susceptibility - Python + scikit-learn</h4>
+          <p>End-to-end Python pipeline that reproduces the Sikkim susceptibility model, from raster stacking to AUC-ROC benchmarking across five classifiers.</p>
+          <div class="resource-meta"><span>PYTHON · JUPYTER</span><span>~250 KB</span><span>Apache-2.0</span></div>
+        </div>
+        <div class="resource-actions">
+          <a class="btn btn-ghost" href="mailto:pratikmojumdar@gmail.com?subject=Resource%20request">Request</a>
+        </div>
+      </div>
+
+      <div class="resource" data-cat="tutorial">
+        <div class="resource-icon">MD</div>
+        <div>
+          <h4>Reading a susceptibility map: what evaluators look for</h4>
+          <p>Short guide for junior researchers preparing susceptibility maps for peer review. Includes a checklist of common referee comments and how to preempt them.</p>
+          <div class="resource-meta"><span>PDF</span><span>6 pages</span><span>Free</span></div>
+        </div>
+        <div class="resource-actions">
+          <a class="btn btn-ghost" href="mailto:pratikmojumdar@gmail.com?subject=Resource%20request">Request</a>
+        </div>
+      </div>
+
+      <div class="resource" data-cat="dataset">
+        <div class="resource-icon">CSV</div>
+        <div>
+          <h4>Curated rainfall time-series (Bangladesh, 1980–2023)</h4>
+          <p>Station-level daily rainfall from Bangladesh Meteorological Department gauges, cleaned for QC flags and gap-filled.</p>
+          <div class="resource-meta"><span>CSV + README</span><span>~8 MB</span><span>Non-commercial</span></div>
+        </div>
+        <div class="resource-actions">
+          <a class="btn btn-ghost" href="mailto:pratikmojumdar@gmail.com?subject=Resource%20request">Request</a>
+        </div>
+      </div>
+
+      <div class="resource" data-cat="script">
+        <div class="resource-icon">JS</div>
+        <div>
+          <h4>RSEI composite - Google Earth Engine snippet</h4>
+          <p>Fully commented GEE JavaScript snippet that computes the RSEI composite (greenness, wetness, dryness, heat) with PCA. Adaptable to any AOI.</p>
+          <div class="resource-meta"><span>GEE · JAVASCRIPT</span><span>~15 KB</span><span>MIT</span></div>
+        </div>
+        <div class="resource-actions">
+          <a class="btn btn-ghost" href="mailto:pratikmojumdar@gmail.com?subject=Resource%20request">Request</a>
+        </div>
+      </div>
+
+      <div class="resource" data-cat="shapefile">
+        <div class="resource-icon">SHP</div>
+        <div>
+          <h4>Tanguar Haor ecosystem boundary</h4>
+          <p>Digitized ecosystem boundary for the Tanguar Haor Ramsar site, with land-cover subclasses attached as attributes.</p>
+          <div class="resource-meta"><span>SHAPEFILE + GPKG</span><span>~1.2 MB</span><span>CC-BY-4.0</span></div>
+        </div>
+        <div class="resource-actions">
+          <a class="btn btn-ghost" href="mailto:pratikmojumdar@gmail.com?subject=Resource%20request">Request</a>
+        </div>
+      </div>
+
+      <div class="resource" data-cat="tutorial">
+        <div class="resource-icon">MD</div>
+        <div>
+          <h4>From figure to publication: a cartography checklist</h4>
+          <p>Practical checklist for producing a publication-ready map - scale bars, projections, colour blindness safety, legend hygiene, and export settings.</p>
+          <div class="resource-meta"><span>PDF</span><span>4 pages</span><span>Free</span></div>
+        </div>
+        <div class="resource-actions">
+          <a class="btn btn-ghost" href="mailto:pratikmojumdar@gmail.com?subject=Resource%20request">Request</a>
+        </div>
+      </div>
+
+    </div>
+
+    <p class="note center" style="margin: 40px auto 0; max-width: 640px;">
+      Have a request or want to contribute a script that helped you? <a href="mailto:pratikmojumdar@gmail.com">Send it my way.</a> Community contributions credited on the page.
+    </p>
+  </div>
+</section>
+
+<!-- CTA to LinkedIn community -->
+<section class="section section-alt">
+  <div class="container center">
+    <span class="eyebrow earth"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="10" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M13 20c0-2.5 2-4.5 4.5-4.5S22 17.5 22 20"/></svg><span>Community</span></span>
+    <h2 style="margin: 14px 0 12px;">Learning happens in the open.</h2>
+    <p class="lead" style="max-width: 640px; margin-inline: auto;">Most of this hub started as replies to questions on LinkedIn. If a resource helped you, share it. If something's missing, ask.</p>
+    <div class="btn-row center mt-24">
+      <a class="btn btn-earth" href="https://www.linkedin.com/in/pratikmojumder/" target="_blank" rel="noopener">Follow on LinkedIn</a>
+      <a class="btn btn-ghost" href="mailto:pratikmojumdar@gmail.com">Contribute a resource</a>
+    </div>
+  </div>
+</section>
+
+<script src="assets/js/main.js?v=20260811" defer></script>
+</body>
+</html>

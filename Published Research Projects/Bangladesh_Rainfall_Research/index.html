@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Innovative trend analysis technique with fuzzy logic and K-means clustering approach for identification of homogenous rainfall region over Bangladesh. Published in Quaternary Science Advances.">
+    <title>BANGLADESH RAINFALL INTELLIGENCE | Fuzzy Clustering &amp; Trend Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2360a5fa'><path d='M12 2c-5.33 4.55-8 8.48-8 11.8 0 4.98 3.8 8.2 8 8.2s8-3.22 8-8.2C20 10.48 17.33 6.55 12 2z'/></svg>" type="image/svg+xml">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <style>
+        :root {
+            --primary: #1d4ed8;
+            --primary-light: #60a5fa;
+            --primary-dark: #0c1a3d;
+            --accent: #0891b2;
+            --accent-light: #22d3ee;
+            --bg-dark: #05080f;
+            --bg-darker: #030509;
+            --bg-card: rgba(29, 78, 216, 0.06);
+            --bg-card-border: rgba(96, 165, 250, 0.12);
+            --text-primary: #e2e8f0;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --gradient-1: linear-gradient(135deg, #1d4ed8, #2563eb, #60a5fa);
+            --gradient-2: linear-gradient(135deg, #0891b2, #06b6d4, #22d3ee);
+            --gradient-hero: linear-gradient(180deg, rgba(5, 8, 15, 0) 0%, rgba(5, 8, 15, 0.6) 40%, rgba(5, 8, 15, 0.95) 100%);
+            --section-padding: clamp(36px, 6vw, 72px);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--bg-dark);
+            background-image:
+                radial-gradient(ellipse 80% 50% at 20% 20%, rgba(29, 78, 216, 0.08) 0%, transparent 60%),
+                radial-gradient(ellipse 60% 40% at 80% 50%, rgba(8, 145, 178, 0.05) 0%, transparent 50%),
+                radial-gradient(ellipse 70% 50% at 50% 80%, rgba(37, 99, 235, 0.06) 0%, transparent 60%);
+            background-attachment: fixed;
+            color: var(--text-primary);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        /* ===== NAVBAR ===== */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(5, 8, 15, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(96, 165, 250, 0.08);
+            transition: all 0.4s ease;
+        }
+        .navbar.scrolled {
+            padding: 0.6rem 2rem;
+            background: rgba(5, 8, 15, 0.95);
+            border-bottom-color: rgba(96, 165, 250, 0.15);
+        }
+        .nav-inner {
+            max-width: 1400px; margin: 0 auto;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+        .nav-logo {
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700; font-size: 1rem;
+            background: var(--gradient-1);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            text-decoration: none; letter-spacing: -0.02em;
+        }
+        .nav-links { display: flex; gap: 0.3rem; list-style: none; }
+        .nav-links a {
+            color: var(--text-secondary); text-decoration: none;
+            font-size: 0.8rem; font-weight: 500;
+            padding: 0.4rem 0.8rem; border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .nav-links a:hover, .nav-links a.active {
+            color: var(--primary-light);
+            background: rgba(96, 165, 250, 0.1);
+        }
+        .nav-toggle { display: none; background: none; border: none; color: var(--text-primary); font-size: 1.3rem; cursor: pointer; }
+
+        /* ===== HERO ===== */
+        .hero {
+            position: relative; min-height: 100vh;
+            display: flex; align-items: center; justify-content: center;
+            overflow: hidden;
+        }
+        .hero-bg {
+            position: absolute; inset: 0; z-index: 0;
+        }
+        .hero-bg::before {
+            content: ''; position: absolute; inset: 0;
+            background:
+                radial-gradient(ellipse 80% 60% at 50% 30%, rgba(29, 78, 216, 0.3) 0%, transparent 70%),
+                radial-gradient(ellipse 60% 50% at 80% 60%, rgba(6, 182, 212, 0.15) 0%, transparent 60%),
+                radial-gradient(ellipse 50% 40% at 20% 70%, rgba(37, 99, 235, 0.1) 0%, transparent 60%);
+        }
+        .hero-bg::after {
+            content: ''; position: absolute; inset: 0;
+            background: var(--gradient-hero);
+        }
+        .hero-content {
+            position: relative; z-index: 1;
+            max-width: 900px; text-align: center;
+            padding: 2rem;
+        }
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            background: rgba(29, 78, 216, 0.15);
+            border: 1px solid rgba(96, 165, 250, 0.2);
+            padding: 0.4rem 1rem; border-radius: 50px;
+            font-size: 0.75rem; font-weight: 600; color: var(--primary-light);
+            text-transform: uppercase; letter-spacing: 0.1em;
+            margin-bottom: 1.5rem;
+            animation: fadeInDown 0.8s ease;
+        }
+        .hero-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700; line-height: 1.1;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+        .hero-title .gradient-text {
+            background: var(--gradient-1);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-title .accent-text {
+            background: var(--gradient-2);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-sub {
+            font-size: clamp(0.85rem, 1.3vw, 1.0rem);
+            color: var(--text-secondary); font-weight: 400;
+        }
+        .hero-subtitle {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            color: var(--text-secondary); max-width: 700px; margin: 0 auto 2rem;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+        .hero-stats {
+            display: grid; grid-template-columns: repeat(4, 1fr);
+            gap: 1.2rem; margin-top: 3rem;
+        }
+        .hero-stat-card {
+            position: relative; background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08); border-radius: 16px;
+            padding: 1.8rem 1.2rem 1.4rem; text-align: center; overflow: hidden;
+            transition: transform 0.35s ease, border-color 0.35s;
+        }
+        .hero-stat-card::before {
+            content: ''; position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+            width: 40%; height: 2px; background: var(--gradient-1);
+            border-radius: 0 0 4px 4px;
+            animation: statLine 1.2s ease forwards; animation-delay: var(--delay, 0s);
+        }
+        @keyframes statLine { from { width: 0; } to { width: 60%; } }
+        .hero-stat-card::after {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(96,165,250,0.06), transparent 70%);
+            pointer-events: none;
+        }
+        .hero-stat-card:hover { transform: translateY(-6px); border-color: rgba(96,165,250,0.3); }
+        .hero-stat-val {
+            font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; font-weight: 800;
+            background: var(--gradient-1);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; line-height: 1;
+        }
+        .hero-stat-unit { font-size: 0.78rem; color: var(--text-muted); margin-top: 0.3rem; }
+        .hero-stat-label { font-size: 0.72rem; color: var(--text-secondary); font-weight: 500; margin-top: 0.1rem; }
+        .hero-tags {
+            display: flex; flex-wrap: wrap; justify-content: center; gap: 0.5rem;
+            animation: fadeInUp 0.8s ease 0.8s both;
+        }
+        .hero-tag {
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.15);
+            padding: 0.3rem 0.8rem; border-radius: 50px;
+            font-size: 0.7rem; color: var(--accent-light);
+            font-weight: 500;
+        }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reveal {
+            opacity: 0; transform: translateY(40px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .reveal.visible {
+            opacity: 1; transform: translateY(0);
+        }
+
+        /* ===== SECTIONS ===== */
+        .section {
+            padding: var(--section-padding) 2rem;
+            max-width: 1400px; margin: 0 auto;
+        }
+        .section-label {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.15em; color: var(--primary-light);
+            margin-bottom: 1rem;
+        }
+        .section-label.accent { color: var(--accent-light); }
+        .section-label i { font-size: 0.6rem; }
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 700; letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .section-subtitle {
+            color: var(--text-secondary); font-size: 1rem;
+            margin-bottom: 3rem;
+        }
+        .section-divider {
+            height: 1px; max-width: 1400px; margin: 0 auto;
+            background: linear-gradient(90deg, transparent, rgba(96, 165, 250, 0.15), transparent);
+        }
+
+        /* ===== GLOW ACCENTS ===== */
+        .section-glow {
+            position: relative;
+        }
+        .section-glow::before {
+            content: ''; position: absolute; top: -100px; width: 500px; height: 500px;
+            border-radius: 50%; filter: blur(120px); opacity: 0.07; pointer-events: none; z-index: -1;
+        }
+        .section-glow.glow-indigo::before {
+            left: -100px;
+            background: #1d4ed8;
+        }
+        .section-glow.glow-cyan::before {
+            right: -100px;
+            background: #06b6d4;
+        }
+
+        /* ===== METHODOLOGY CARDS ===== */
+        .method-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
+        .method-card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px; padding: 2rem;
+            transition: all 0.4s ease;
+            position: relative; overflow: hidden;
+        }
+        .method-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: var(--gradient-1); opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .method-card:hover {
+            border-color: rgba(96, 165, 250, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(29, 78, 216, 0.1);
+        }
+        .method-card:hover::before { opacity: 1; }
+        .method-card .stage-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 0.1em; color: var(--primary-light);
+            margin-bottom: 0.8rem;
+        }
+        .method-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem; font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+        .method-card p {
+            color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6;
+        }
+        .method-card .card-icon {
+            width: 48px; height: 48px; border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(29, 78, 216, 0.1);
+            border: 1px solid rgba(96, 165, 250, 0.15);
+            margin-bottom: 1rem; font-size: 1.2rem; color: var(--primary-light);
+        }
+
+        /* ===== STUDY AREA ===== */
+        .map-container {
+            position: relative; border-radius: 16px; overflow: hidden;
+            border: 1px solid var(--bg-card-border);
+            background: var(--bg-card);
+        }
+        .map-container {
+            height: 450px;
+        }
+        .map-container #map {
+            width: 100%; height: 450px; border: none; display: block;
+        }
+        .map-overlay {
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(0deg, rgba(10, 14, 26, 0.95), transparent);
+            padding: 2rem; display: flex; align-items: flex-end; justify-content: space-between;
+            flex-wrap: wrap; gap: 1rem;
+        }
+        .map-overlay h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem; font-weight: 600;
+        }
+        .map-overlay p {
+            color: var(--text-secondary); font-size: 0.85rem; max-width: 500px;
+        }
+        .map-coords {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.75rem; color: var(--accent-light);
+            background: rgba(6, 182, 212, 0.1);
+            border: 1px solid rgba(34, 211, 238, 0.15);
+            padding: 0.3rem 0.8rem; border-radius: 8px;
+        }
+
+        /* ===== CHARTS ===== */
+        .chart-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem; margin-bottom: 3rem;
+        }
+        .chart-card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px; padding: 1.5rem;
+        }
+        .chart-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1rem; font-weight: 600; margin-bottom: 1rem;
+        }
+        .chart-wrapper {
+            position: relative; height: 300px;
+        }
+
+        /* ===== FIGURE GALLERY ===== */
+        .figure-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        .figure-card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px; overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        .figure-card:hover {
+            border-color: rgba(96, 165, 250, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(29, 78, 216, 0.1);
+        }
+        .figure-card img {
+            width: 100%; height: auto; max-height: 420px; object-fit: contain;
+            display: block; background: rgba(0,0,0,0.3); cursor: zoom-in;
+            transition: opacity 0.3s ease;
+        }
+        .figure-card img:hover { opacity: 0.92; }
+
+        /* ===== LIGHTBOX ===== */
+        .img-modal { display: none; position: fixed; inset: 0; z-index: 2000; background: rgba(0,0,0,0.92); align-items: center; justify-content: center; padding: 2rem; cursor: zoom-out; }
+        .img-modal.open { display: flex; }
+        .img-modal img { max-width: 95vw; max-height: 92vh; object-fit: contain; border-radius: 6px; }
+        .figure-card .figure-caption {
+            padding: 1rem 1.5rem;
+            font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5;
+        }
+        .figure-card.wide {
+            grid-column: 1 / -1;
+        }
+        .figure-card.wide img {
+            height: 400px; object-fit: contain;
+            background: rgba(0,0,0,0.3);
+        }
+
+        /* ===== FINDINGS CARDS ===== */
+        .findings-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+        .finding-card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px; padding: 2rem;
+            transition: all 0.4s ease;
+            position: relative; overflow: hidden;
+        }
+        .finding-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: var(--gradient-2); opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+        .finding-card:hover {
+            border-color: rgba(34, 211, 238, 0.3);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 60px rgba(6, 182, 212, 0.1);
+        }
+        .finding-card:hover::before { opacity: 1; }
+        .finding-card .finding-num {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem; font-weight: 700;
+            background: var(--gradient-2);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+        .finding-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem; font-weight: 600;
+            margin-bottom: 0.6rem;
+        }
+        .finding-card p {
+            color: var(--text-secondary); font-size: 0.88rem; line-height: 1.6;
+        }
+
+        /* ===== ABOUT ===== */
+        .about-grid {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 2rem;
+        }
+        .about-card {
+            background: var(--bg-card);
+            border: 1px solid var(--bg-card-border);
+            border-radius: 16px; padding: 2rem;
+        }
+        .about-card h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem; font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .about-card p {
+            color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+        .about-meta {
+            display: flex; flex-direction: column; gap: 1rem;
+        }
+        .about-meta-item {
+            display: flex; align-items: flex-start; gap: 0.8rem;
+            color: var(--text-secondary); font-size: 0.85rem;
+        }
+        .about-meta-item i {
+            color: var(--primary-light); margin-top: 0.2rem; width: 16px; text-align: center;
+        }
+        .about-meta-item a {
+            color: var(--accent-light); text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .about-meta-item a:hover { color: var(--accent); }
+        .authors-list {
+            list-style: none; padding: 0;
+        }
+        .authors-list li {
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(96, 165, 250, 0.08);
+            color: var(--text-secondary); font-size: 0.88rem;
+        }
+        .authors-list li:last-child { border-bottom: none; }
+        .authors-list li strong { color: var(--text-primary); font-weight: 600; }
+        .badge-oa {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            background: rgba(34, 197, 94, 0.1);
+            border: 1px solid rgba(34, 197, 94, 0.2);
+            padding: 0.3rem 0.8rem; border-radius: 50px;
+            font-size: 0.72rem; font-weight: 600; color: #4ade80;
+            text-transform: uppercase; letter-spacing: 0.05em;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer-section { border-top: 1px solid rgba(96,165,250,0.08); padding: 3rem 2rem 2rem; text-align: center; }
+        .footer-inner { max-width: 960px; margin: 0 auto; }
+        .footer-name { font-family: 'Space Grotesk', sans-serif; font-size: 1.35rem; font-weight: 700; margin-bottom: 0.3rem; }
+        .footer-tagline { font-size: 0.68rem; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 2rem; }
+        .footer-links { display: flex; flex-wrap: wrap; justify-content: center; gap: 0.6rem; margin-bottom: 2rem; }
+        .footer-link {
+            display: inline-flex; align-items: center; gap: 0.45rem;
+            color: var(--text-secondary); text-decoration: none; font-size: 0.78rem; font-weight: 500;
+            padding: 0.5rem 1rem; border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.06); background: rgba(255,255,255,0.03);
+            transition: all 0.3s ease;
+        }
+        .footer-link:hover { color: var(--primary-light); border-color: rgba(96,165,250,0.4); background: rgba(96,165,250,0.08); transform: translateY(-2px); }
+        .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,0.06); margin: 0 0 1.4rem; }
+        .footer-copy { font-size: 0.72rem; color: rgba(255,255,255,0.22); }
+
+        /* ===== MOBILE HAMBURGER ===== */
+        .mobile-menu {
+            display: none; position: fixed; inset: 0; z-index: 999;
+            background: rgba(6, 10, 20, 0.97);
+            backdrop-filter: blur(20px);
+            flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem;
+        }
+        .mobile-menu.open { display: flex; }
+        .mobile-menu a {
+            color: var(--text-primary); text-decoration: none;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.3rem; font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .mobile-menu a:hover { color: var(--primary-light); }
+        .mobile-close {
+            position: absolute; top: 1.5rem; right: 1.5rem;
+            background: none; border: none; color: var(--text-primary);
+            font-size: 1.5rem; cursor: pointer;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .about-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .nav-toggle { display: block; }
+            .hero-stats { gap: 1.2rem; }
+            .method-grid,
+            .findings-grid { grid-template-columns: 1fr; }
+            .chart-grid { grid-template-columns: 1fr; }
+            .figure-grid { grid-template-columns: 1fr; }
+            .figure-card.wide img { height: 260px; }
+            .map-container, .map-container #map { height: 300px; }
+        }
+        @media (max-width: 600px) {
+            .hero-stats { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 480px) {
+            .section { padding: var(--section-padding) 1rem; }
+            .hero-content { padding: 1rem; }
+            .hero-stats { gap: 0.8rem; }
+        }
+    </style>
+    <link rel="stylesheet" href="../../assets/css/chrome.css?v=20260811">
+</head>
+<body>
+<script src="../../assets/js/chrome.js?v=20260811" data-base="../../" data-page="research" data-scheme="dark"></script>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+    <div class="nav-inner">
+        <a href="#" class="nav-logo"><i class="fas fa-cloud-rain"></i>&ensp;RAINFALL INTELLIGENCE</a>
+        <ul class="nav-links">
+            <li><a href="#methodology">Methodology</a></li>
+            <li><a href="#study-area">Study Area</a></li>
+            <li><a href="#trends">Trends</a></li>
+            <li><a href="#findings">Findings</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+        <button class="nav-toggle" onclick="document.getElementById('mobileMenu').classList.add('open')" aria-label="Menu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+    <button class="mobile-close" onclick="this.parentElement.classList.remove('open')" aria-label="Close"><i class="fas fa-times"></i></button>
+    <a href="#methodology" onclick="this.parentElement.classList.remove('open')">Methodology</a>
+    <a href="#study-area" onclick="this.parentElement.classList.remove('open')">Study Area</a>
+    <a href="#trends" onclick="this.parentElement.classList.remove('open')">Trends</a>
+    <a href="#findings" onclick="this.parentElement.classList.remove('open')">Findings</a>
+    <a href="#about" onclick="this.parentElement.classList.remove('open')">About</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="hero-content">
+        <div class="hero-badge"><i class="fas fa-droplet"></i> Quaternary Science Advances &middot; 2024</div>
+        <h1 class="hero-title">
+            <span class="gradient-text">Innovative Trend Analysis</span><br>
+            with <span class="accent-text">Fuzzy Logic &amp; K-Means Clustering</span><br>
+            <span class="hero-sub">for Identification of Homogenous Rainfall Region over Bangladesh</span>
+        </h1>
+        <p class="hero-subtitle">A long-term rainfall data analysis (1981&ndash;2021) investigating precipitation patterns across 29 BMD stations using Fuzzy C-Means clustering, Innovative Trend Analysis, and Mann-Kendall tests.</p>
+        <div class="hero-stats">
+            <div class="hero-stat-card" style="--delay: 0.2s;">
+                <div class="hero-stat-val">29</div>
+                <div class="hero-stat-unit">Stations</div>
+                <div class="hero-stat-label">BMD Network</div>
+            </div>
+            <div class="hero-stat-card" style="--delay: 0.4s;">
+                <div class="hero-stat-val">40</div>
+                <div class="hero-stat-unit">Years</div>
+                <div class="hero-stat-label">1981 to 2021</div>
+            </div>
+            <div class="hero-stat-card" style="--delay: 0.6s;">
+                <div class="hero-stat-val">2</div>
+                <div class="hero-stat-unit">Clusters</div>
+                <div class="hero-stat-label">Identified</div>
+            </div>
+            <div class="hero-stat-card" style="--delay: 0.8s;">
+                <div class="hero-stat-val">0.73</div>
+                <div class="hero-stat-unit">Peak</div>
+                <div class="hero-stat-label">Silhouette Width</div>
+            </div>
+        </div>
+        <div class="hero-tags">
+            <span class="hero-tag">Fuzzy C-Means</span>
+            <span class="hero-tag">K-Means Clustering</span>
+            <span class="hero-tag">Innovative Trend Analysis</span>
+            <span class="hero-tag">Mann-Kendall Tests</span>
+            <span class="hero-tag">Sen's Slope</span>
+            <span class="hero-tag">IDW Interpolation</span>
+        </div>
+    </div>
+</section>
+
+<!-- METHODOLOGY -->
+<div class="section-divider"></div>
+<section class="section section-glow glow-indigo" id="methodology">
+    <div class="reveal">
+        <div class="section-label"><i class="fas fa-flask"></i> Research Framework</div>
+        <h2 class="section-title">Methodology</h2>
+        <p class="section-subtitle">A six-stage analytical pipeline combining clustering algorithms with advanced trend analysis techniques.</p>
+    </div>
+    <div class="method-grid">
+        <div class="method-card reveal">
+            <div class="card-icon"><i class="fas fa-database"></i></div>
+            <div class="stage-num">Stage 01</div>
+            <h3>Data Collection</h3>
+            <p>40-year rainfall dataset (1981&ndash;2021) from 29 BMD meteorological stations. KNN imputation for missing data. Boxplot-based outlier detection.</p>
+        </div>
+        <div class="method-card reveal">
+            <div class="card-icon"><i class="fas fa-project-diagram"></i></div>
+            <div class="stage-num">Stage 02</div>
+            <h3>Clustering Analysis</h3>
+            <p>K-means and Fuzzy C-Means (FCM) clustering to identify homogeneous rainfall regions. Silhouette width validation (peak 0.73 for k=2).</p>
+        </div>
+        <div class="method-card reveal">
+            <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+            <div class="stage-num">Stage 03</div>
+            <h3>ITA Analysis</h3>
+            <p>Innovative Trend Analysis computed using R packages. Monthly precipitation trends identified as monotonic/non-monotonic, increasing/decreasing.</p>
+        </div>
+        <div class="method-card reveal">
+            <div class="card-icon"><i class="fas fa-square-root-variable"></i></div>
+            <div class="stage-num">Stage 04</div>
+            <h3>Mann-Kendall Tests</h3>
+            <p>Original MK, Modified MK (MMKY), Pre-Whitened MK (PWMK), and Trend-Free Pre-Whitened MK (TFPW-MK) applied for trend significance.</p>
+        </div>
+        <div class="method-card reveal">
+            <div class="card-icon"><i class="fas fa-arrow-trend-down"></i></div>
+            <div class="stage-num">Stage 05</div>
+            <h3>Sen's Slope Estimation</h3>
+            <p>Non-parametric estimation of trend magnitude. Positive values indicate increasing, negative values indicate decreasing rainfall trends.</p>
+        </div>
+        <div class="method-card reveal">
+            <div class="card-icon"><i class="fas fa-map-location-dot"></i></div>
+            <div class="stage-num">Stage 06</div>
+            <h3>Spatial Interpolation</h3>
+            <p>IDW interpolation in ArcGIS 10.8 for spatial mapping of rainfall patterns across Bangladesh.</p>
+        </div>
+    </div>
+</section>
+
+<!-- STUDY AREA -->
+<div class="section-divider"></div>
+<section class="section section-glow glow-cyan" id="study-area">
+    <div class="reveal">
+        <div class="section-label accent"><i class="fas fa-globe-asia"></i> Geographic Context</div>
+        <h2 class="section-title">Study Area</h2>
+        <p class="section-subtitle">Bangladesh is a South Asian country with a tropical monsoon climate that is highly vulnerable to rainfall variability.</p>
+    </div>
+    <div class="map-container reveal">
+        <div id="map" style="width:100%;height:100%;"></div>
+        <div class="map-overlay">
+            <div>
+                <h3>Bangladesh</h3>
+                <p>29 BMD meteorological stations covering the entire country. Tropical monsoon climate with average annual rainfall approximately 2,428 mm.</p>
+            </div>
+            <div class="map-coords"><i class="fas fa-location-dot"></i>&ensp;23.6850&deg;N, 90.3563&deg;E</div>
+        </div>
+    </div>
+</section>
+
+<!-- RAINFALL TRENDS -->
+<div class="section-divider"></div>
+<section class="section section-glow glow-indigo" id="trends">
+    <div class="reveal">
+        <div class="section-label"><i class="fas fa-chart-bar"></i> Data Analysis</div>
+        <h2 class="section-title">Rainfall Trends</h2>
+        <p class="section-subtitle">Statistical analysis of precipitation patterns and spatial clustering across Bangladesh.</p>
+    </div>
+
+    <div class="chart-grid reveal">
+        <div class="chart-card">
+            <h3><i class="fas fa-chart-column" style="color:var(--primary-light);"></i>&ensp;Station Distribution by Trend Type</h3>
+            <div class="chart-wrapper">
+                <canvas id="trendBarChart"></canvas>
+            </div>
+        </div>
+        <div class="chart-card">
+            <h3><i class="fas fa-circle-half-stroke" style="color:var(--accent-light);"></i>&ensp;Cluster Distribution</h3>
+            <div class="chart-wrapper">
+                <canvas id="clusterDoughnut"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <h3 style="font-family:'Space Grotesk',sans-serif; font-size:1.2rem; font-weight:600; margin-bottom:1.5rem;" class="reveal">
+        <i class="fas fa-images" style="color:var(--accent-light);"></i>&ensp;Research Figures
+    </h3>
+    <div class="figure-grid">
+        <div class="figure-card reveal">
+            <img src="images/page3_img1.jpeg" alt="Study Area Map" loading="lazy" onclick="openLightbox(this.src)">
+            <div class="figure-caption">Fig. 1. Study Area Map showing location of BMD stations in Bangladesh.</div>
+        </div>
+        <div class="figure-card reveal">
+            <img src="images/page6_img1.jpeg" alt="Methodological flowchart" loading="lazy" onclick="openLightbox(this.src)">
+            <div class="figure-caption">Fig. 2. Methodological flowchart.</div>
+        </div>
+        <div class="figure-card wide reveal">
+            <img src="images/page11_img1.jpeg" alt="ITA graphs for all 29 meteorological stations" loading="lazy" onclick="openLightbox(this.src)">
+            <div class="figure-caption"><strong>Fig. 9.</strong> ITA graphs for all 29 meteorological stations showing monotonic and non-monotonic rainfall trends.</div>
+        </div>
+        <div class="figure-card reveal">
+            <img src="images/page15_img1.jpeg" alt="Clustering map" loading="lazy" onclick="openLightbox(this.src)">
+            <div class="figure-caption">Fig. 10. Clustering map of Bangladesh meteorological stations.</div>
+        </div>
+        <div class="figure-card reveal">
+            <img src="images/page16_img1.jpeg" alt="Rainfall trends distribution" loading="lazy" onclick="openLightbox(this.src)">
+            <div class="figure-caption">Fig. 11. Rainfall trends distribution over selected stations.</div>
+        </div>
+    </div>
+</section>
+
+<!-- KEY FINDINGS -->
+<div class="section-divider"></div>
+<section class="section section-glow glow-cyan" id="findings">
+    <div class="reveal">
+        <div class="section-label accent"><i class="fas fa-lightbulb"></i> Results</div>
+        <h2 class="section-title">Key Findings</h2>
+        <p class="section-subtitle">Critical insights from 40 years of rainfall data across Bangladesh's meteorological network.</p>
+    </div>
+    <div class="findings-grid">
+        <div class="finding-card reveal">
+            <div class="finding-num">01</div>
+            <h3>Two Distinct Rainfall Regions</h3>
+            <p>Both K-means and FCM successfully identified two homogeneous clusters. Cluster 1 (65.51%, 19 stations) covers northwest, southwest, and central regions. Cluster 2 (34.48%, 10 stations) covers northeast, southeast, and eastern hills.</p>
+        </div>
+        <div class="finding-card reveal">
+            <div class="finding-num">02</div>
+            <h3>Predominantly Negative Trends</h3>
+            <p>MK tests showed predominantly negative trends across Bangladesh. 25 of 29 stations showed significant decreasing rainfall from 1981&ndash;2021. Only Khulna, Chittagong, Sandwip, and Sitakunda showed positive trends.</p>
+        </div>
+        <div class="finding-card reveal">
+            <div class="finding-num">03</div>
+            <h3>Non-Monotonic Patterns Dominate</h3>
+            <p>44.83% of stations showed non-monotonic decrease, 37.93% showed non-monotonic increase. Only 17.24% showed consistent monotonic decrease. No stations showed monotonic increase.</p>
+        </div>
+        <div class="finding-card reveal">
+            <div class="finding-num">04</div>
+            <h3>Strongest Decline Stations</h3>
+            <p>Madaripur, Feni, and MaijdeeCourt showed the steepest rainfall decline. Trend indicator ranged from 0.72 to &minus;1.80 across all stations.</p>
+        </div>
+        <div class="finding-card reveal">
+            <div class="finding-num">05</div>
+            <h3>Optimal Clustering at k=2</h3>
+            <p>Silhouette analysis yielded peak value of 0.73 for two clusters, classified as "strong" clustering. Both K-means and FCM converged on identical regional boundaries.</p>
+        </div>
+        <div class="finding-card reveal">
+            <div class="finding-num">06</div>
+            <h3>Coastal Vulnerability</h3>
+            <p>Cluster 2 coastal stations (Cox's Bazar, Kutubdia, Sandwip) showed non-monotonic decreasing trends, potentially linked to sea surface temperature changes and atmospheric dynamics.</p>
+        </div>
+    </div>
+</section>
+
+<!-- ABOUT -->
+<div class="section-divider"></div>
+<section class="section section-glow glow-indigo" id="about">
+    <div class="reveal">
+        <div class="section-label"><i class="fas fa-book-open"></i> Publication</div>
+        <h2 class="section-title">About This Research</h2>
+        <p class="section-subtitle">Published in Quaternary Science Advances, Elsevier.</p>
+    </div>
+    <div class="about-grid reveal">
+        <div class="about-card">
+            <h3>Research Summary</h3>
+            <p>This study investigated rainfall patterns across 29 Bangladesh Meteorological Department (BMD) stations over a 40-year period (1981&ndash;2021). Using Fuzzy C-Means and K-means clustering algorithms, two homogeneous rainfall regions were identified with a strong silhouette score of 0.73. Innovative Trend Analysis (ITA) and multiple variants of the Mann-Kendall test were applied to characterize monotonic and non-monotonic precipitation trends. The results revealed predominantly declining rainfall across Bangladesh, with 25 of 29 stations showing significant negative trends. Spatial interpolation using IDW in ArcGIS provided detailed mapping of these patterns, contributing to improved understanding of regional climate variability in this highly vulnerable South Asian nation.</p>
+            <div style="display:flex; flex-wrap:wrap; gap:0.8rem; align-items:center; margin-top:1rem;">
+                <span class="badge-oa"><i class="fas fa-lock-open"></i> Open Access &middot; CC BY</span>
+            </div>
+            <div class="about-meta" style="margin-top:1.5rem;">
+                <div class="about-meta-item">
+                    <i class="fas fa-journal-whills"></i>
+                    <span>Quaternary Science Advances, Volume 15, 2024, 100227</span>
+                </div>
+                <div class="about-meta-item">
+                    <i class="fas fa-link"></i>
+                    <a href="https://doi.org/10.1016/j.qsa.2024.100227" target="_blank">doi.org/10.1016/j.qsa.2024.100227</a>
+                </div>
+            </div>
+        </div>
+        <div class="about-card">
+            <h3>Authors</h3>
+            <ul class="authors-list">
+                <li>
+                    <strong>Sujit Kumar Roy</strong><br>
+                    <span style="font-size:0.78rem; color:var(--text-muted);">Institute of Water and Flood Management, BUET, Dhaka</span>
+                </li>
+                <li>
+                    <strong>Pratik Mojumder</strong><br>
+                    <span style="font-size:0.78rem; color:var(--text-muted);">Dept. of Environmental Science and Disaster Management, Daffodil International University</span>
+                </li>
+                <li style="color:var(--text-muted); font-style:italic; font-size:0.82rem;">and others</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<div class="section-divider"></div>
+
+<!-- LIGHTBOX -->
+<div class="img-modal" id="imgModal" onclick="closeLightbox()">
+    <img id="modalImg" src="" alt="Expanded figure">
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+<script>
+// ===== LIGHTBOX =====
+function openLightbox(src) {
+    document.getElementById('modalImg').src = src;
+    document.getElementById('imgModal').classList.add('open');
+}
+function closeLightbox() {
+    document.getElementById('imgModal').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+
+// ===== NAVBAR SCROLL =====
+window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// ===== REVEAL ON SCROLL =====
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); }});
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ===== ACTIVE NAV LINK =====
+const sections = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(s => {
+        if (window.scrollY >= s.offsetTop - 200) current = s.getAttribute('id');
+    });
+    document.querySelectorAll('.nav-links a').forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+});
+
+// ===== CHART DEFAULTS =====
+Chart.defaults.color = '#94a3b8';
+Chart.defaults.borderColor = 'rgba(96, 165, 250, 0.08)';
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 12;
+
+const indigoPalette = [
+    'rgba(29, 78, 216, 0.85)',
+    'rgba(37, 99, 235, 0.85)',
+    'rgba(96, 165, 250, 0.85)',
+    'rgba(6, 182, 212, 0.85)'
+];
+
+// ===== TREND BAR CHART =====
+new Chart(document.getElementById('trendBarChart'), {
+    type: 'bar',
+    data: {
+        labels: ['Monotonic Decrease', 'Non-Monotonic Decrease', 'Non-Monotonic Increase', 'Monotonic Increase'],
+        datasets: [{
+            label: 'Number of Stations',
+            data: [5, 13, 11, 0],
+            backgroundColor: [
+                'rgba(29, 78, 216, 0.85)',
+                'rgba(37, 99, 235, 0.75)',
+                'rgba(6, 182, 212, 0.85)',
+                'rgba(34, 211, 238, 0.6)'
+            ],
+            borderColor: [
+                'rgba(29, 78, 216, 1)',
+                'rgba(37, 99, 235, 1)',
+                'rgba(6, 182, 212, 1)',
+                'rgba(34, 211, 238, 1)'
+            ],
+            borderWidth: 1,
+            borderRadius: 6
+        }]
+    },
+    options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {
+            legend: { display: false },
+            tooltip: {
+                callbacks: {
+                    label: ctx => ctx.parsed.y + ' stations'
+                }
+            }
+        },
+        scales: {
+            x: { grid: { display: false }, ticks: { maxRotation: 45, minRotation: 0, font: { size: 11 } } },
+            y: { title: { display: true, text: 'Number of Stations' }, grid: { color: 'rgba(129,140,248,0.06)' }, beginAtZero: true }
+        }
+    }
+});
+
+// ===== CLUSTER DOUGHNUT =====
+new Chart(document.getElementById('clusterDoughnut'), {
+    type: 'doughnut',
+    data: {
+        labels: ['Cluster 1 (19 stations)', 'Cluster 2 (10 stations)'],
+        datasets: [{
+            data: [65.51, 34.48],
+            backgroundColor: [
+                'rgba(29, 78, 216, 0.85)',
+                'rgba(6, 182, 212, 0.85)'
+            ],
+            borderColor: [
+                'rgba(29, 78, 216, 1)',
+                'rgba(6, 182, 212, 1)'
+            ],
+            borderWidth: 2,
+            hoverOffset: 8
+        }]
+    },
+    options: {
+        responsive: true, maintainAspectRatio: false,
+        cutout: '60%',
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: { padding: 20, usePointStyle: true, pointStyle: 'circle', font: { size: 12 } }
+            },
+            tooltip: {
+                callbacks: {
+                    label: ctx => ctx.label + ': ' + ctx.parsed + '%'
+                }
+            }
+        }
+    }
+});
+
+// ===== LEAFLET MAP =====
+const map = L.map('map', { center: [23.6850, 90.3563], zoom: 7, zoomControl: true, attributionControl: true });
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a> &copy; <a href="https://carto.com/">CARTO</a>',
+    maxZoom: 18
+}).addTo(map);
+L.polygon([
+    [26.63, 88.01], [26.63, 92.67], [20.74, 92.67], [20.74, 88.01]
+], { color: '#60a5fa', weight: 2, fillColor: '#60a5fa', fillOpacity: 0.08 }).addTo(map).bindPopup('<b>Bangladesh</b><br>29 BMD Stations');
+</script>
+
+</body>
+</html>

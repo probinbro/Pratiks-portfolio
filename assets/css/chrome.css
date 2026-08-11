@@ -1,0 +1,386 @@
+/* ==========================================================================
+   Pratik Mojumder - Universal site chrome (header + footer)
+   Self-contained and namespaced under .pm-* so it can be dropped onto the
+   main site (light/dark) and the dark research microsites alike.
+   Single source of truth: assets/js/chrome.js renders the markup.
+   ========================================================================== */
+
+.pm-chrome {
+  /* No box of its own: a sticky header sticks within its parent's bounds, and a
+     wrapper that is only header-height tall would let it scroll straight away.
+     display:contents keeps the token scope while removing the box. */
+  display: contents;
+
+  /* Tokens are local to the chrome so host-page variables can never bleed in. */
+  --pm-h: 64px;
+
+  --pm-forest-900: #0f2a1e;
+  --pm-forest-800: #163a29;
+  --pm-forest-700: #1e4d37;
+  --pm-forest-600: #2d6a4f;
+  --pm-forest-500: #40916c;
+  --pm-forest-300: #95d5b2;
+  --pm-forest-100: #d8f3dc;
+
+  --pm-surface: rgba(250, 247, 242, 0.72);
+  --pm-surface-solid: #faf7f2;
+  --pm-panel: #ffffff;
+  --pm-ink: #16211b;
+  --pm-ink-2: #46554d;
+  --pm-ink-3: #6c7a72;
+  --pm-line: rgba(22, 58, 41, 0.12);
+  --pm-line-soft: rgba(22, 58, 41, 0.08);
+  --pm-hover: rgba(45, 106, 79, 0.09);
+
+  --pm-radius: 10px;
+  --pm-pill: 999px;
+  --pm-font: 'Roboto', system-ui, -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --pm-display: 'DM Sans', 'Roboto', system-ui, sans-serif;
+
+  font-family: var(--pm-font);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Dark: either the main site's theme switch, or a microsite forcing it. */
+[data-theme="dark"] .pm-chrome,
+.pm-chrome[data-pm-scheme="dark"] {
+  --pm-surface: rgba(9, 20, 16, 0.78);
+  --pm-surface-solid: #0b1712;
+  --pm-panel: #101b15;
+  --pm-ink: #e8f2ec;
+  --pm-ink-2: #b3c5ba;
+  --pm-ink-3: #849a8d;
+  --pm-line: rgba(149, 213, 178, 0.16);
+  --pm-line-soft: rgba(149, 213, 178, 0.10);
+  --pm-hover: rgba(64, 145, 108, 0.18);
+  --pm-forest-900: #e2f6ea;
+  --pm-forest-800: #c3ecd3;
+  --pm-forest-700: #a8e0bd;
+}
+
+.pm-chrome *,
+.pm-chrome *::before,
+.pm-chrome *::after { box-sizing: border-box; }
+
+.pm-chrome a { text-decoration: none; }
+
+.pm-shell {
+  width: 100%;
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 0 clamp(16px, 2.4vw, 28px);
+}
+
+/* --------------------------------------------------------------------------
+   Header
+   -------------------------------------------------------------------------- */
+.pm-header {
+  position: sticky;
+  top: 0;
+  z-index: 900;
+  background: var(--pm-surface);
+  backdrop-filter: saturate(160%) blur(14px);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color .3s ease, box-shadow .3s ease, background .3s ease;
+}
+.pm-header.is-scrolled {
+  border-bottom-color: var(--pm-line-soft);
+  box-shadow: 0 8px 28px rgba(15, 42, 30, 0.07);
+}
+[data-theme="dark"] .pm-header.is-scrolled,
+.pm-chrome[data-pm-scheme="dark"] .pm-header.is-scrolled {
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.45);
+}
+
+.pm-header .pm-shell {
+  height: var(--pm-h);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Brand ------------------------------------------------------------------ */
+.pm-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  margin-right: auto;
+  min-width: 0;
+}
+.pm-mark {
+  flex: 0 0 auto;
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  display: grid; place-items: center;
+  background: linear-gradient(140deg, #40916c, #163a29);
+  color: #fff;
+  font-family: var(--pm-font);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  box-shadow: 0 2px 8px rgba(22, 58, 41, 0.28);
+}
+.pm-brand-text { display: flex; flex-direction: column; min-width: 0; line-height: 1.15; }
+.pm-brand-name {
+  font-family: var(--pm-display);
+  font-size: 1.02rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: var(--pm-forest-900);
+  white-space: nowrap;
+}
+.pm-brand-role {
+  font-size: 0.62rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--pm-ink-3);
+  white-space: nowrap;
+}
+
+/* Nav -------------------------------------------------------------------- */
+.pm-nav { display: flex; align-items: center; gap: 2px; }
+.pm-nav a {
+  position: relative;
+  padding: 8px 13px;
+  border-radius: 8px;
+  font-size: 0.885rem;
+  font-weight: 500;
+  color: var(--pm-ink-2);
+  white-space: nowrap;
+  transition: color .18s ease, background .18s ease;
+}
+.pm-nav a:hover { color: var(--pm-forest-800); background: var(--pm-hover); }
+.pm-nav a.is-active { color: var(--pm-forest-800); font-weight: 600; }
+.pm-nav a.is-active::after {
+  content: '';
+  position: absolute;
+  left: 13px; right: 13px; bottom: 3px;
+  height: 2px; border-radius: 2px;
+  background: var(--pm-forest-500);
+}
+
+/* Right cluster ---------------------------------------------------------- */
+.pm-actions { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; }
+
+.pm-icon-btn {
+  width: 38px; height: 38px;
+  display: inline-grid; place-items: center;
+  border: 1px solid var(--pm-line);
+  border-radius: 10px;
+  background: transparent;
+  color: var(--pm-forest-700);
+  cursor: pointer;
+  transition: background .18s ease, border-color .18s ease, transform .18s ease;
+}
+.pm-icon-btn:hover { background: var(--pm-hover); border-color: var(--pm-forest-300); transform: translateY(-1px); }
+.pm-icon-btn svg { width: 17px; height: 17px; display: block; }
+
+.pm-theme .pm-ic-sun { display: none; }
+.pm-theme .pm-ic-moon { display: block; }
+[data-theme="dark"] .pm-theme .pm-ic-sun { display: block; }
+[data-theme="dark"] .pm-theme .pm-ic-moon { display: none; }
+/* Microsites are permanently dark - show the moon, hide the toggle entirely. */
+.pm-chrome[data-pm-scheme="dark"] .pm-theme { display: none; }
+
+.pm-cta {
+  display: inline-flex; align-items: center; gap: 8px;
+  height: 38px;
+  padding: 0 17px;
+  border-radius: var(--pm-pill);
+  background: linear-gradient(135deg, #2d6a4f, #1e4d37);
+  color: #fff;
+  font-size: 0.875rem;
+  font-weight: 500;
+  white-space: nowrap;
+  box-shadow: 0 3px 12px rgba(30, 77, 55, 0.28);
+  transition: transform .18s ease, box-shadow .18s ease, filter .18s ease;
+}
+.pm-cta::before {
+  content: '';
+  width: 7px; height: 7px; border-radius: 50%;
+  background: #95d5b2;
+  box-shadow: 0 0 0 3px rgba(149, 213, 178, 0.28);
+  animation: pmPulse 2.6s ease-in-out infinite;
+}
+.pm-cta:hover { color: #fff; transform: translateY(-1px); filter: brightness(1.08); box-shadow: 0 6px 18px rgba(30, 77, 55, 0.36); }
+.pm-cta-ic { display: none; width: 17px; height: 17px; }
+
+.pm-burger { display: none; }
+.pm-burger svg { width: 19px; height: 19px; }
+
+/* Mobile drawer ---------------------------------------------------------- */
+.pm-drawer {
+  position: fixed;
+  inset: var(--pm-h) 0 auto 0;
+  z-index: 899;
+  background: var(--pm-surface-solid);
+  border-bottom: 1px solid var(--pm-line);
+  box-shadow: 0 18px 40px rgba(15, 42, 30, 0.14);
+  padding: 8px clamp(16px, 2.4vw, 28px) 16px;
+  display: none;
+  flex-direction: column;
+}
+.pm-drawer.is-open { display: flex; animation: pmDrawer .22s cubic-bezier(.2,.7,.2,1) both; }
+.pm-drawer a {
+  padding: 13px 6px;
+  font-size: 0.98rem;
+  font-weight: 500;
+  color: var(--pm-ink-2);
+  border-bottom: 1px solid var(--pm-line-soft);
+}
+.pm-drawer a:last-child { border-bottom: 0; }
+.pm-drawer a.is-active { color: var(--pm-forest-800); font-weight: 600; }
+
+@keyframes pmDrawer {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes pmPulse {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(149, 213, 178, 0.5); }
+  50%      { transform: scale(1.25); box-shadow: 0 0 0 6px rgba(149, 213, 178, 0); }
+}
+
+@media (max-width: 1080px) {
+  .pm-brand-role { display: none; }
+  .pm-nav a { padding: 8px 10px; font-size: 0.85rem; }
+}
+@media (max-width: 940px) {
+  .pm-nav { display: none; }
+  .pm-burger { display: inline-grid; }
+  /* Collapse to a labelled mail icon rather than a bare pulsing dot. */
+  .pm-cta span { display: none; }
+  .pm-cta::before { display: none; }
+  .pm-cta-ic { display: block; }
+  .pm-cta { width: 38px; padding: 0; border-radius: 10px; }
+}
+@media (max-width: 380px) {
+  .pm-brand-name { font-size: 0.94rem; }
+  .pm-cta { display: none; }
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+.pm-footer {
+  position: relative;
+  overflow: hidden;
+  margin-top: 72px;
+  padding: 60px 0 28px;
+  background: #0d2419;
+  color: rgba(255, 255, 255, 0.74);
+  font-size: 0.92rem;
+}
+.pm-footer::before {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 55% 45% at 12% 0%, rgba(64, 145, 108, 0.26) 0%, transparent 62%),
+    radial-gradient(ellipse 50% 45% at 88% 100%, rgba(45, 106, 79, 0.20) 0%, transparent 62%);
+}
+.pm-footer .pm-shell { position: relative; z-index: 1; }
+
+.pm-footer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) repeat(3, minmax(0, 1fr));
+  gap: 44px 32px;
+}
+@media (max-width: 900px) { .pm-footer-grid { grid-template-columns: 1fr 1fr; gap: 36px 24px; } }
+@media (max-width: 560px) { .pm-footer-grid { grid-template-columns: 1fr; } }
+
+.pm-footer-brand { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.pm-footer-brand .pm-mark { background: rgba(255, 255, 255, 0.10); box-shadow: none; }
+.pm-footer-brand strong {
+  font-family: var(--pm-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  color: #fff;
+}
+.pm-footer-blurb { max-width: 340px; line-height: 1.65; color: rgba(255, 255, 255, 0.66); }
+
+.pm-footer h5 {
+  margin: 0 0 15px;
+  font-family: var(--pm-font);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #fff;
+}
+.pm-footer ul { list-style: none; margin: 0; padding: 0; }
+.pm-footer li { margin-bottom: 9px; }
+.pm-footer a { color: rgba(255, 255, 255, 0.74); transition: color .18s ease; }
+.pm-footer a:hover { color: #95d5b2; }
+.pm-footer .pm-muted { color: rgba(255, 255, 255, 0.42); font-size: 0.84rem; }
+
+/* Academic / social link row --------------------------------------------- */
+.pm-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 20px;
+}
+.pm-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 13px;
+  border-radius: var(--pm-pill);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.86);
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: background .18s ease, border-color .18s ease, color .18s ease, transform .18s ease;
+}
+.pm-links a svg { width: 14px; height: 14px; flex: 0 0 auto; }
+.pm-links a:hover {
+  color: #fff;
+  transform: translateY(-1px);
+  background: rgba(149, 213, 178, 0.18);
+  border-color: rgba(149, 213, 178, 0.45);
+}
+
+.pm-footer-bottom {
+  margin-top: 44px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.10);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pm-chrome *, .pm-chrome *::before, .pm-chrome *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Microsite host adjustments
+   Applied only when chrome.js marks the page as a research microsite, so the
+   page's own fixed in-page section bar sits below the universal header.
+   -------------------------------------------------------------------------- */
+/* The microsites set overflow-x:hidden on <body>, which makes body a scroll
+   container and silently kills position:sticky. Pin the header instead and
+   reserve its height on the body. */
+body.pm-host-microsite { padding-top: 64px; }
+body.pm-host-microsite .pm-header { position: fixed; top: 0; left: 0; right: 0; }
+body.pm-host-microsite .navbar,
+body.pm-host-microsite nav#navbar { top: 64px !important; }
+body.pm-host-microsite .hero { min-height: calc(100vh - 64px); }
+/* Anchor jumps must clear both the universal header and the page's own bar. */
+body.pm-host-microsite section[id] { scroll-margin-top: 128px; }
+/* Wide data tables scrolled the whole page sideways on narrow screens. */
+body.pm-host-microsite table { display: block; max-width: 100%; overflow-x: auto; }
+/* The microsites' own footers are replaced by the universal one. */
+body.pm-host-microsite > footer,
+body.pm-host-microsite footer.footer-section { display: none !important; }

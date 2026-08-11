@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geospatial &amp; Data Viz Gallery - Pratik Mojumder</title>
+  <meta name="description" content="Selected geospatial outputs: land-use maps, disaster susceptibility models, and climate projections.">
+  <link rel="icon" type="image/svg+xml" href="assets/img/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <script>(function(){try{var t=localStorage.getItem("theme");if(!t){t=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light";}if(t==="dark")document.documentElement.setAttribute("data-theme","dark");}catch(e){}})();</script>
+  <link rel="stylesheet" href="assets/css/main.css?v=20260811">
+  <link rel="stylesheet" href="assets/css/chrome.css?v=20260811">
+</head>
+<body>
+<script src="assets/js/chrome.js?v=20260811" data-page="gallery"></script>
+
+<!-- Page header -->
+<section class="page-intro">
+  <div class="container">
+    <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 15l5-5 5 5 3-3 5 5"/><circle cx="9" cy="8" r="1.5" fill="currentColor"/></svg><span>Geospatial Portfolio</span></span>
+    <h1>Maps, models, and figures.</h1>
+    <p class="lead">
+      A technical portfolio, not a photo album. Each item lists the tool used and the research context - so evaluators can see the methodology behind the output.
+    </p>
+  </div>
+</section>
+
+<!-- Tools -->
+<section style="padding: 0 0 40px;">
+  <div class="container">
+    <h3 class="rail-title">Tools &amp; software</h3>
+    <div class="tools-grid">
+      <div class="tool-chip">
+        <div class="tool-name">Google Earth Engine</div>
+        <div class="tool-role">Planetary-scale remote sensing analysis</div>
+        <div class="tool-tag">JavaScript API · Python</div>
+      </div>
+      <div class="tool-chip">
+        <div class="tool-name">ArcGIS Pro</div>
+        <div class="tool-role">Cartography, spatial statistics, ModelBuilder</div>
+        <div class="tool-tag">Esri</div>
+      </div>
+      <div class="tool-chip">
+        <div class="tool-name">QGIS</div>
+        <div class="tool-role">Open-source GIS &amp; plugin workflows</div>
+        <div class="tool-tag">Open source</div>
+      </div>
+      <div class="tool-chip">
+        <div class="tool-name">R</div>
+        <div class="tool-role">Statistical modelling &amp; tidyverse workflows</div>
+        <div class="tool-tag">terra · sf · ggplot2</div>
+      </div>
+      <div class="tool-chip">
+        <div class="tool-name">Python</div>
+        <div class="tool-role">Automation, ML models, geospatial pipelines</div>
+        <div class="tool-tag">rasterio · geopandas · scikit-learn</div>
+      </div>
+      <div class="tool-chip">
+        <div class="tool-name">Figma</div>
+        <div class="tool-role">Figure design &amp; UI mockups</div>
+        <div class="tool-tag">Design</div>
+      </div>
+      <div class="tool-chip">
+        <div class="tool-name">Adobe Photoshop</div>
+        <div class="tool-role">Raster editing &amp; scientific illustration</div>
+        <div class="tool-tag">Adobe CC</div>
+      </div>
+      <div class="tool-chip">
+        <div class="tool-name">Leaflet</div>
+        <div class="tool-role">Web-based interactive maps</div>
+        <div class="tool-tag">JS · Open source</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Gallery -->
+<section class="section" style="padding-top: 20px;">
+  <div class="container">
+    <div class="section-head">
+      <span class="eyebrow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M8 12l3 3 5-6"/></svg><span>Selected outputs</span></span>
+      <h2>Land use, hazard, and climate visualizations</h2>
+      <p>Click any tile to open the full caption with the tools and methodology behind each output.</p>
+    </div>
+
+    <div class="gallery-toolbar" role="tablist">
+      <button data-filter="all" class="active">All</button>
+      <button data-filter="landuse">Land use</button>
+      <button data-filter="hazard">Disaster susceptibility</button>
+      <button data-filter="climate">Climate projections</button>
+      <button data-filter="ecology">Ecology</button>
+    </div>
+
+    <div class="gallery">
+      <!-- 1 Land use -->
+      <div class="g-item" data-cat="landuse" data-title="Dhaka land-use change, 2000–2023" data-meta="ArcGIS Pro · Landsat time series · Random Forest classification" data-desc="Multi-decadal land-use map showing urban expansion, agricultural loss, and water-body change in the Dhaka metropolitan area. Prepared for the Environmental and Sustainability Indicators publication (Elsevier, 2023).">
+        <div class="g-thumb">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#faf7f2"/>
+            <path d="M50 50 L120 30 L200 60 L280 40 L350 80 L360 200 L300 260 L200 240 L100 250 L40 200 Z" fill="#8b6f47" opacity="0.4"/>
+            <path d="M80 100 L180 90 L260 120 L320 160 L280 220 L150 210 L100 180 Z" fill="#2d6a4f" opacity="0.6"/>
+            <path d="M120 130 L200 130 L240 170 L200 190 L140 180 Z" fill="#c53030" opacity="0.5"/>
+            <path d="M40 220 Q100 210 160 220 T280 240 T360 260" stroke="#4a6b8a" stroke-width="6" fill="none" opacity="0.7"/>
+            <text x="20" y="290" font-family="monospace" font-size="10" fill="#6c7a72">GEE + ArcGIS</text>
+          </svg>
+        </div>
+        <div class="g-caption">
+          <h4>Dhaka land-use change, 2000–2023</h4>
+          <p>Multi-decadal urban expansion map</p>
+          <div class="g-tools"><span>ArcGIS</span><span>GEE</span><span>Random Forest</span></div>
+        </div>
+      </div>
+
+      <!-- 2 Hazard -->
+      <div class="g-item" data-cat="hazard" data-title="Sikkim landslide susceptibility (ML)" data-meta="Python · scikit-learn · QGIS · 12 conditioning factors" data-desc="Landslide susceptibility index for the Sikkim Himalaya, produced by comparing five machine-learning classifiers against a historical landslide inventory. Featured in Geological Journal (Wiley, 2025).">
+        <div class="g-thumb">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#faf7f2"/>
+            <defs>
+              <linearGradient id="hz1" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#c53030"/>
+                <stop offset="0.4" stop-color="#dd6b20"/>
+                <stop offset="0.7" stop-color="#d69e2e"/>
+                <stop offset="1" stop-color="#2d6a4f"/>
+              </linearGradient>
+            </defs>
+            <path d="M60 40 L340 50 L360 260 L40 250 Z" fill="url(#hz1)" opacity="0.55"/>
+            <path d="M80 80 Q140 60 200 100 T340 130" stroke="#1a1f1c" stroke-width="1" fill="none" opacity="0.4"/>
+            <path d="M60 130 Q140 110 220 140 T360 160" stroke="#1a1f1c" stroke-width="1" fill="none" opacity="0.4"/>
+            <path d="M50 180 Q140 160 240 200 T370 220" stroke="#1a1f1c" stroke-width="1" fill="none" opacity="0.4"/>
+            <circle cx="140" cy="90" r="3" fill="#1a1f1c"/>
+            <circle cx="220" cy="130" r="3" fill="#1a1f1c"/>
+            <circle cx="280" cy="180" r="3" fill="#1a1f1c"/>
+            <text x="20" y="290" font-family="monospace" font-size="10" fill="#6c7a72">Susceptibility index · Python + QGIS</text>
+          </svg>
+        </div>
+        <div class="g-caption">
+          <h4>Sikkim landslide susceptibility</h4>
+          <p>ML-based hazard model, Himalaya</p>
+          <div class="g-tools"><span>Python</span><span>QGIS</span><span>scikit-learn</span></div>
+        </div>
+      </div>
+
+      <!-- 3 Climate -->
+      <div class="g-item" data-cat="climate" data-title="Bangladesh rainfall clusters" data-meta="R · Fuzzy c-means · K-means clustering · CHIRPS" data-desc="Homogenous rainfall regions identified through fuzzy logic and K-means clustering across Bangladesh, using historical rainfall series. Featured in Quaternary Science Advances (Elsevier, 2024).">
+        <div class="g-thumb">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#faf7f2"/>
+            <path d="M100 50 L200 40 L280 70 L320 130 L300 200 L250 250 L150 260 L80 200 L60 120 Z" fill="#2c4a6b" opacity="0.5"/>
+            <path d="M120 80 L220 70 L270 110 L280 170 L220 210 L140 200 L100 150 Z" fill="#4a6b8a" opacity="0.7"/>
+            <path d="M150 110 L230 100 L260 150 L220 190 L170 180 L140 150 Z" fill="#94a9c1" opacity="0.9"/>
+            <circle cx="180" cy="140" r="20" fill="#e2ebf3" opacity="0.6"/>
+            <text x="20" y="290" font-family="monospace" font-size="10" fill="#6c7a72">Fuzzy c-means · R</text>
+          </svg>
+        </div>
+        <div class="g-caption">
+          <h4>Bangladesh rainfall clusters</h4>
+          <p>Homogenous rainfall regions</p>
+          <div class="g-tools"><span>R</span><span>Fuzzy c-means</span><span>K-means</span></div>
+        </div>
+      </div>
+
+      <!-- 4 Land use -->
+      <div class="g-item" data-cat="landuse" data-title="Ecosystem service value change, Dhaka" data-meta="GEE · CA-Markov · Value transfer coefficients" data-desc="Projected change in ecosystem service value under land-use scenarios for Dhaka. Modeled using cellular-automata–Markov chain projection and value-transfer coefficients.">
+        <div class="g-thumb">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#faf7f2"/>
+            <g opacity="0.85">
+              <rect x="50" y="60" width="30" height="30" fill="#2d6a4f"/>
+              <rect x="80" y="60" width="30" height="30" fill="#40916c"/>
+              <rect x="110" y="60" width="30" height="30" fill="#95d5b2"/>
+              <rect x="140" y="60" width="30" height="30" fill="#c9a97a"/>
+              <rect x="170" y="60" width="30" height="30" fill="#a67c52"/>
+              <rect x="50" y="90" width="30" height="30" fill="#40916c"/>
+              <rect x="80" y="90" width="30" height="30" fill="#2d6a4f"/>
+              <rect x="110" y="90" width="30" height="30" fill="#40916c"/>
+              <rect x="140" y="90" width="30" height="30" fill="#95d5b2"/>
+              <rect x="170" y="90" width="30" height="30" fill="#c9a97a"/>
+              <rect x="50" y="120" width="30" height="30" fill="#c9a97a"/>
+              <rect x="80" y="120" width="30" height="30" fill="#a67c52"/>
+              <rect x="110" y="120" width="30" height="30" fill="#8b6f47"/>
+              <rect x="140" y="120" width="30" height="30" fill="#a67c52"/>
+              <rect x="170" y="120" width="30" height="30" fill="#c9a97a"/>
+            </g>
+            <path d="M220 100 L320 100 L340 200 L240 210 Z" fill="#2c4a6b" opacity="0.35"/>
+            <text x="240" y="130" font-family="Inter" font-size="12" fill="#fff" font-weight="600">ESV +12%</text>
+            <text x="240" y="150" font-family="Inter" font-size="12" fill="#fff" font-weight="600">Forest −8%</text>
+            <text x="240" y="170" font-family="Inter" font-size="12" fill="#fff" font-weight="600">Urban +21%</text>
+            <text x="20" y="290" font-family="monospace" font-size="10" fill="#6c7a72">CA-Markov projection</text>
+          </svg>
+        </div>
+        <div class="g-caption">
+          <h4>Ecosystem service value change</h4>
+          <p>Scenario projection for Dhaka</p>
+          <div class="g-tools"><span>GEE</span><span>CA-Markov</span><span>R</span></div>
+        </div>
+      </div>
+
+      <!-- 5 Hazard -->
+      <div class="g-item" data-cat="hazard" data-title="Rainwater harvesting potential zones" data-meta="ArcGIS Pro · AHP · Random Forest · 10 factors" data-desc="Suitability map for rainwater harvesting in a hilly region of Bangladesh, cross-validated with ML and AHP methods. Featured in Journal of Asian Earth Sciences: X (Elsevier, 2025).">
+        <div class="g-thumb">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#faf7f2"/>
+            <defs>
+              <linearGradient id="rwh" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0" stop-color="#ede0cc"/>
+                <stop offset="0.5" stop-color="#c9a97a"/>
+                <stop offset="1" stop-color="#2d6a4f"/>
+              </linearGradient>
+            </defs>
+            <path d="M50 60 L200 40 L340 60 L360 240 L280 270 L120 260 L40 220 Z" fill="url(#rwh)" opacity="0.75"/>
+            <path d="M80 90 Q160 70 240 100 T340 120" stroke="#1a1f1c" stroke-width="1" fill="none" opacity="0.3"/>
+            <path d="M60 140 Q160 110 260 140 T350 170" stroke="#1a1f1c" stroke-width="1" fill="none" opacity="0.3"/>
+            <path d="M50 190 Q160 160 260 190 T360 220" stroke="#1a1f1c" stroke-width="1" fill="none" opacity="0.3"/>
+            <text x="20" y="290" font-family="monospace" font-size="10" fill="#6c7a72">RWH suitability · ArcGIS + AHP</text>
+          </svg>
+        </div>
+        <div class="g-caption">
+          <h4>Rainwater harvesting zones</h4>
+          <p>ML + AHP suitability model</p>
+          <div class="g-tools"><span>ArcGIS</span><span>AHP</span><span>Random Forest</span></div>
+        </div>
+      </div>
+
+      <!-- 6 Ecology -->
+      <div class="g-item" data-cat="ecology" data-title="Sundarbans mangrove fragmentation" data-meta="GEE · FRAGSTATS · Landsat + Sentinel-2" data-desc="Time-series mangrove cover and fragmentation metrics in the Sundarbans. Landscape indices computed in FRAGSTATS after Sentinel/Landsat classification.">
+        <div class="g-thumb">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#faf7f2"/>
+            <g fill="#2d6a4f" opacity="0.75">
+              <circle cx="80" cy="90" r="18"/>
+              <circle cx="130" cy="110" r="22"/>
+              <circle cx="180" cy="100" r="16"/>
+              <circle cx="240" cy="130" r="20"/>
+              <circle cx="290" cy="120" r="14"/>
+              <circle cx="330" cy="150" r="18"/>
+              <circle cx="90" cy="180" r="20"/>
+              <circle cx="150" cy="200" r="14"/>
+              <circle cx="220" cy="210" r="18"/>
+              <circle cx="300" cy="220" r="16"/>
+              <circle cx="60" cy="240" r="12"/>
+              <circle cx="150" cy="260" r="14"/>
+            </g>
+            <path d="M40 50 Q200 30 360 60 L360 260 Q200 280 40 260 Z" stroke="#4a6b8a" stroke-width="2" fill="none" opacity="0.5"/>
+            <text x="20" y="290" font-family="monospace" font-size="10" fill="#6c7a72">Mangrove patches · GEE + FRAGSTATS</text>
+          </svg>
+        </div>
+        <div class="g-caption">
+          <h4>Sundarbans mangrove patches</h4>
+          <p>Fragmentation index, 1990–2024</p>
+          <div class="g-tools"><span>GEE</span><span>FRAGSTATS</span><span>Sentinel-2</span></div>
+        </div>
+      </div>
+
+      <!-- 7 Ecology -->
+      <div class="g-item" data-cat="ecology" data-title="Dhaka RSEI ecological quality" data-meta="GEE · Landsat surface reflectance · PCA" data-desc="Remote-Sensing Ecological Index composite (greenness, wetness, dryness, heat) tracking ecological quality change in Dhaka. Featured in Land (MDPI, 2025).">
+        <div class="g-thumb">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#faf7f2"/>
+            <defs>
+              <linearGradient id="rsei" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0" stop-color="#2d6a4f"/>
+                <stop offset="0.5" stop-color="#d69e2e"/>
+                <stop offset="1" stop-color="#c53030"/>
+              </linearGradient>
+            </defs>
+            <path d="M60 50 L340 50 L360 260 L40 250 Z" fill="url(#rsei)" opacity="0.6"/>
+            <g fill="#faf7f2" opacity="0.4">
+              <rect x="90" y="90" width="60" height="60"/>
+              <rect x="160" y="70" width="70" height="80"/>
+              <rect x="240" y="100" width="50" height="70"/>
+              <rect x="100" y="170" width="80" height="60"/>
+              <rect x="200" y="180" width="90" height="50"/>
+            </g>
+            <text x="20" y="290" font-family="monospace" font-size="10" fill="#6c7a72">RSEI (PC1) · Landsat</text>
+          </svg>
+        </div>
+        <div class="g-caption">
+          <h4>Dhaka RSEI trend</h4>
+          <p>Ecological quality composite</p>
+          <div class="g-tools"><span>GEE</span><span>PCA</span><span>Landsat</span></div>
+        </div>
+      </div>
+
+      <!-- 8 Climate -->
+      <div class="g-item" data-cat="climate" data-title="Temperature anomaly projection" data-meta="Python · CMIP6 · SSP2-4.5 scenario" data-desc="Bias-corrected CMIP6 temperature anomaly for Bangladesh under SSP2-4.5, aggregated to district level. Source: CMIP6 multi-model ensemble (Copernicus / WCRP).">
+        <div class="g-thumb">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#faf7f2"/>
+            <defs>
+              <linearGradient id="tmp" x1="0" x2="1" y1="0" y2="0">
+                <stop offset="0" stop-color="#2c4a6b"/>
+                <stop offset="0.5" stop-color="#faf7f2"/>
+                <stop offset="1" stop-color="#c53030"/>
+              </linearGradient>
+            </defs>
+            <path d="M60 60 L340 60 L340 240 L60 240 Z" fill="url(#tmp)" opacity="0.6"/>
+            <path d="M60 140 L340 140" stroke="#1a1f1c" stroke-width="1" opacity="0.4" stroke-dasharray="4 4"/>
+            <path d="M60 140 Q120 130 180 135 Q240 145 300 155 L340 165" stroke="#1a1f1c" stroke-width="2" fill="none"/>
+            <text x="80" y="80" font-family="Inter" font-size="12" fill="#1a1f1c" font-weight="600">+1.8°C</text>
+            <text x="240" y="220" font-family="Inter" font-size="12" fill="#1a1f1c" font-weight="600">+3.4°C</text>
+            <text x="20" y="290" font-family="monospace" font-size="10" fill="#6c7a72">CMIP6 · SSP2-4.5</text>
+          </svg>
+        </div>
+        <div class="g-caption">
+          <h4>Temperature anomaly, 2050</h4>
+          <p>CMIP6 downscaled projection</p>
+          <div class="g-tools"><span>Python</span><span>CMIP6</span><span>xarray</span></div>
+        </div>
+      </div>
+
+      <!-- 9 Hazard -->
+      <div class="g-item" data-cat="hazard" data-title="Flood exposure, Sunamganj" data-meta="QGIS · Sentinel-1 SAR · MNDWI" data-desc="Post-monsoon flood extent for Sunamganj district, derived from Sentinel-1 SAR and cross-checked with MNDWI from Sentinel-2. Overlays population exposure.">
+        <div class="g-thumb">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg">
+            <rect width="400" height="300" fill="#faf7f2"/>
+            <path d="M50 90 Q120 60 200 90 T340 100 L360 260 Q200 240 40 260 Z" fill="#4a6b8a" opacity="0.65"/>
+            <path d="M80 120 Q160 100 240 130 T340 140 L340 210 Q200 200 60 220 Z" fill="#2c4a6b" opacity="0.7"/>
+            <g fill="#c53030" opacity="0.9">
+              <circle cx="120" cy="140" r="4"/>
+              <circle cx="180" cy="160" r="6"/>
+              <circle cx="240" cy="170" r="4"/>
+              <circle cx="200" cy="200" r="5"/>
+              <circle cx="280" cy="180" r="4"/>
+            </g>
+            <text x="20" y="290" font-family="monospace" font-size="10" fill="#6c7a72">Flood extent · Sentinel-1</text>
+          </svg>
+        </div>
+        <div class="g-caption">
+          <h4>Flood exposure, Sunamganj</h4>
+          <p>SAR-derived monsoon flood extent</p>
+          <div class="g-tools"><span>QGIS</span><span>Sentinel-1</span><span>SAR</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Lightbox -->
+<div class="lightbox" role="dialog" aria-modal="true">
+  <button class="lb-close" aria-label="Close">×</button>
+  <div class="lb-panel">
+    <div class="lb-visual"></div>
+    <div class="lb-body">
+      <h3 class="lb-title"></h3>
+      <div class="meta lb-meta"></div>
+      <p class="lb-desc"></p>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/main.js?v=20260811" defer></script>
+</body>
+</html>
