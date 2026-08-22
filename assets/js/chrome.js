@@ -16,7 +16,12 @@
   var base = (script && script.getAttribute('data-base')) || '';
   var page = (script && script.getAttribute('data-page')) || '';
   var scheme = (script && script.getAttribute('data-scheme')) || '';
-  var isMicrosite = scheme === 'dark';
+  var host = (script && script.getAttribute('data-host')) || '';
+  /* Two independent concerns: `scheme` picks the colour palette, `host` says
+     the page has its own fixed in-page bar to sit below. The landing page is
+     dark but is NOT a microsite, so it must not inherit the host offsets. */
+  var isDark = scheme === 'dark';
+  var isMicrositeHost = host === 'microsite';
 
   var EMAIL = 'pratikmojumdar@gmail.com';
 
@@ -72,7 +77,7 @@
   /* ---------------------------------------------------------------- header */
   function headerHTML() {
     return '' +
-    '<div class="pm-chrome"' + (isMicrosite ? ' data-pm-scheme="dark"' : '') + '>' +
+    '<div class="pm-chrome"' + (isDark ? ' data-pm-scheme="dark"' : '') + '>' +
       '<header class="pm-header" id="pmHeader">' +
         '<div class="pm-shell">' +
           '<a class="pm-brand" href="' + esc(url('index.html')) + '" aria-label="Pratik Mojumder - home">' +
@@ -110,7 +115,7 @@
     }).join('');
 
     return '' +
-    '<div class="pm-chrome"' + (isMicrosite ? ' data-pm-scheme="dark"' : '') + '>' +
+    '<div class="pm-chrome"' + (isDark ? ' data-pm-scheme="dark"' : '') + '>' +
       '<footer class="pm-footer">' +
         '<div class="pm-shell">' +
           '<div class="pm-footer-grid">' +
@@ -182,7 +187,7 @@
     }
 
     /* Theme is only switchable on the main site; microsites are always dark. */
-    if (theme && !isMicrosite) {
+    if (theme && !isDark) {
       var apply = function (t) {
         if (t === 'dark') root.setAttribute('data-theme', 'dark');
         else root.removeAttribute('data-theme');
@@ -224,7 +229,7 @@
 
   /* Header goes in immediately - this script sits directly after <body>, so
      nothing has painted yet and there is no flash of unstyled chrome. */
-  if (isMicrosite) document.body.classList.add('pm-host-microsite');
+  if (isMicrositeHost) document.body.classList.add('pm-host-microsite');
   document.body.insertAdjacentHTML('afterbegin', headerHTML());
   wireHeader();
 
